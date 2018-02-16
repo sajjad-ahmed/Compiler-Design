@@ -61,18 +61,19 @@ import java.util.HashMap;
 public class Main
 {
 
+    private static ArrayList<String> allTokensArrayList = new ArrayList<>();
     private static ArrayList<String> keywordList = new ArrayList<>();
     private static ArrayList<String> identifierList = new ArrayList<>();
 
-    private static ArrayList<String> arithmeticOperatorList = new ArrayList<>(); //arithmatic
-    private static ArrayList<String> assignmentOperatorList = new ArrayList<>();
-    private static ArrayList<String> logicalOperatorList = new ArrayList<>();
-    private static ArrayList<String> relationalOperatorList = new ArrayList<>();
+//    private static ArrayList<String> arithmeticOperatorList = new ArrayList<>(); //arithmatic
+//    private static ArrayList<String> assignmentOperatorList = new ArrayList<>();
+//    private static ArrayList<String> logicalOperatorList = new ArrayList<>();
+//    private static ArrayList<String> relationalOperatorList = new ArrayList<>();
 
     private static ArrayList<String> numericValuesList = new ArrayList<>();
 
-    private static ArrayList<String> otherValuesList = new ArrayList<>();
-    private static ArrayList<String> allTokensArrayList = new ArrayList<>();
+    private static ArrayList<String> symbolList = new ArrayList<>();
+    private static ArrayList<String> operatorList = new ArrayList<>();
 
     private static ArrayList<String> errorList = new ArrayList<>();
 
@@ -84,14 +85,14 @@ public class Main
             "public", "return", "short", "static", "strictfp", "super", "switch", "synchronized", "this",
             "throw", "throws", "transient", "try", "void", "volatile", "while", "true", "false", "null"};
 
-    private static String[] commonOperatorArray = {"+", "-", "*", "/", "%", "=", "<", ">", "!", "&", "|", "."};
+    private static String[] operatorArray = {"+", "-", "*", "/", "%", "++", "--", "=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", "&=", "^=", "|=", "!", "&&", "||", "==", "!=", ">", "<", ">=", "<="};
 
-    private static String[] arithmeticOperatorArray = {"+", "-", "*", "/", "%", "++", "--"};
-    private static String[] assignmentOperatorArray = {"=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", "&=", "^=", "|="};
-    private static String[] logicalOperatorArray = {"!", "&&", "||"};
-    private static String[] relationalOperatorArray = {"==", "!=", ">", "<", ">=", "<="};
+//    private static String[] arithmeticOperatorArray = {"+", "-", "*", "/", "%", "++", "--"};
+//    private static String[] assignmentOperatorArray = {"=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", "&=", "^=", "|="};
+//    private static String[] logicalOperatorArray = {"!", "&&", "||"};
+//    private static String[] relationalOperatorArray = {"==", "!=", ">", "<", ">=", "<="};
 
-    private static String[] symbolValuesArray = {".", ",", "\"", "{", "}", "(", ")", "[", "]", ";"};
+    private static String[] symbolArray = {".", ",", "\"", "{", "}", "(", ")", "[", "]", ";"};
 
 
     public static void main(String[] _args)
@@ -113,8 +114,9 @@ public class Main
 
         HashMap<Integer, String> keywordsMap = new HashMap<>();
         int beginning = 0;
-        boolean alphabateflag = false;
+        boolean alphabateFlag = false;
         boolean numberFlag = false;
+        boolean symbolFlag = false;
         boolean operatorFlag = false;
         String word = "";
 
@@ -122,112 +124,107 @@ public class Main
         {
 //            System.out.println("*:" + ch);
 //--------------------------------------------------------------------------------------------------
-            if ((int) eachCharacter == 32 && !alphabateflag)
+            if ((int) eachCharacter == 32)
             {
-                alphabateflag = false;
-            }
-//--------------------------------------------------------------------------------------------------
-//            else if ((int) eachCharacter == 32 && !numberFlag)
-//            {
-//                numberFlag = false;
-//            }
-//////--------------------------------------------------------------------------------------------------
-//            else if ((int) eachCharacter == 32 && !operatorFlag)
-//            {
-//                operatorFlag = false;
-//            }
-//--------------------------------------------------------------------------------------------------
-            else if ((int) eachCharacter == 32)
-            {
-
-                allTokensArrayList.add(word);
-                if (isKeyword(word))
-                    keywordList.add(word);
-                else
-                    identifierList.add(word);
-                word = "";
-                alphabateflag = false;
-            }
-//--------------------------------------------------------------------------------------------------
-            else if (isASymbol(eachCharacter))
-            {
-                if (alphabateflag)
+                if (!word.equals(""))
                 {
                     allTokensArrayList.add(word);
-                    if (isKeyword(word))
-                        keywordList.add(word);
-                    else
-                        identifierList.add(word);
-                    word = "";
+                    if (alphabateFlag)
+                    {
+                        if (isKeyword(word))
+                            keywordList.add(word);
+                        else
+                            identifierList.add(word);
+                    } else if (operatorFlag)
+                        operatorList.add(word);
+                    else if (numberFlag)
+                    {
+                        numericValuesList.add(word);
+                    } else if (symbolFlag)
+                        symbolList.add(word);
+                    else errorList.add(word);
                 }
-                allTokensArrayList.add(eachCharacter + "");
-                otherValuesList.add(eachCharacter + "");
-
-
+                word = "";
+                alphabateFlag = false;
+                numberFlag = false;
+                symbolFlag = false;
+                operatorFlag = false;
             }
 //--------------------------------------------------------------------------------------------------
             else if (isAlphabate(eachCharacter))
             {
-                System.out.println("be====" + word);
-
-                word = word.concat("" + eachCharacter);
-                System.out.println("af====" + word);
-                if (operatorFlag)
+                if (!word.equals(""))
                 {
-                    allTokensArrayList.add(word);
-                    relationalOperatorList.add(word);
-                }
-
-                alphabateflag = true;
-                numberFlag = false;
-                operatorFlag = false;
-            }
-//--------------------------------------------------------------------------------------------------
-            else if (isNumber(eachCharacter))
-            {
-                if (operatorFlag)
-                {
-                    allTokensArrayList.add(word);
-                    logicalOperatorList.add(word);
-                }
-                word = word.concat("" + eachCharacter);
-                numberFlag = true;
-                alphabateflag = false;
-                operatorFlag = false;
-            }
-//--------------------------------------------------------------------------------------------------
-            else if (isCommonOperator(eachCharacter))
-            {
-
-                System.out.println("-----hiii");
-                if (alphabateflag)
-                {
-                    allTokensArrayList.add(word);
-                    if (isKeyword(word))
-                        keywordList.add(word);
-                    else
-                        identifierList.add(word);
+                    if (operatorFlag)
+                    {
+                        allTokensArrayList.add(word);
+                        operatorList.add(word);
+                    } else if (numberFlag)
+                    {
+                        allTokensArrayList.add(word);
+                        numericValuesList.add(word);
+                    } else if (symbolFlag)
+                    {
+                        allTokensArrayList.add(word);
+                        symbolList.add(word);
+                    } else errorList.add(word);
                     word = "";
-                    alphabateflag = false;
                 }
-
-                word = word.concat("" + eachCharacter);
-                operatorFlag = true;
+                alphabateFlag = true;
+                word = word + eachCharacter;
+                numberFlag = false;
+                symbolFlag = false;
+                operatorFlag = false;
             }
 //--------------------------------------------------------------------------------------------------
+            else if (isOperator("" + eachCharacter))
+            {
+
+                if (!word.equals(""))
+                {
+                    allTokensArrayList.add(word);
+                    if (alphabateFlag)
+                    {
+                        if (isKeyword(word))
+                            keywordList.add(word);
+                        else
+                            identifierList.add(word);
+                    } else if (operatorFlag)
+                        operatorList.add(word);
+                    else if (numberFlag)
+                    {
+                        numericValuesList.add(word);
+                    } else if (symbolFlag)
+                        symbolList.add(word);
+                    else errorList.add(word);
+                }
+                word = "";
+                alphabateFlag = false;
+                numberFlag = false;
+                symbolFlag = false;
+                operatorFlag = false;
+
+
+
+            } else if (isASymbol(eachCharacter + ""))
+            {
+
+            }
+
         }
         printArrayList(allTokensArrayList, "All Tokens:");
 
         printArrayList(keywordList, "keyword list");
-        printArrayList(otherValuesList, "Other");
         printArrayList(identifierList, "identifier list");
-
-        printArrayList(arithmeticOperatorList, "Arithmetic");
-        printArrayList(assignmentOperatorList, "Assignment");
-        printArrayList(logicalOperatorList, "Logical");
-        printArrayList(relationalOperatorList, "");
-
         printArrayList(numericValuesList, "Numeric");
+
+//        printArrayList(arithmeticOperatorList, "Arithmetic");
+//        printArrayList(assignmentOperatorList, "Assignment");
+//        printArrayList(logicalOperatorList, "Logical");
+//        printArrayList(relationalOperatorList, "");
+
+        printArrayList(symbolList, "Symbols");
+        printArrayList(operatorList, "Operators");
 
         printArrayList(errorList, "Error");
 
@@ -245,28 +242,28 @@ public class Main
         return (int) ch >= 48 && (int) ch <= 57;
     }
 
-    public static boolean isMatOperator(String w)
+//    public static boolean isMatOperator(String w)
+//    {
+//        int flag = 5;
+//        for (String string : arithmeticOperatorArray)
+//        {
+//
+//            if (string.equals(w))
+//            {
+//                flag++;
+//                break;
+//            }
+//        }
+//        return flag != 5;
+//    }
+
+    private static boolean isOperator(String s)
     {
         int flag = 5;
-        for (String string : arithmeticOperatorArray)
+        for (String string : operatorArray)
         {
 
-            if (string.equals(w))
-            {
-                flag++;
-                break;
-            }
-        }
-        return flag != 5;
-    }
-
-    private static boolean isCommonOperator(char ch)
-    {
-        int flag = 5;
-        for (String string : commonOperatorArray)
-        {
-
-            if (string.equals("" + ch))
+            if (string.equals(s))
             {
                 flag++;
                 break;
@@ -289,12 +286,12 @@ public class Main
         return flag != 5;
     }
 
-    private static boolean isASymbol(char ch)
+    private static boolean isASymbol(String s)
     {
         int flag = 5;
-        for (String string : symbolValuesArray)
+        for (String string : symbolArray)
         {
-            if (string.equals("" + ch))
+            if (string.equals("" + s))
             {
                 flag++;
                 break;
@@ -303,47 +300,47 @@ public class Main
         return flag != 5;
     }
 
-    public static boolean isAssignmentOperator(String w)
-    {
-        int flag = 5;
-        for (String string : assignmentOperatorArray)
-        {
-            if (string.equals(w))
-            {
-                flag++;
-                break;
-            }
-        }
-        return flag != 5;
-    }
-
-    public static boolean isRelationalOperator(String w)
-    {
-        int flag = 5;
-        for (String string : relationalOperatorArray)
-        {
-            if (string.equals(w))
-            {
-                flag++;
-                break;
-            }
-        }
-        return flag != 5;
-    }
-
-    public static boolean isLogical(String w)
-    {
-        int flag = 5;
-        for (String string : logicalOperatorArray)
-        {
-            if (string.equals(w))
-            {
-                flag++;
-                break;
-            }
-        }
-        return flag != 5;
-    }
+//    public static boolean isAssignmentOperator(String w)
+//    {
+//        int flag = 5;
+//        for (String string : assignmentOperatorArray)
+//        {
+//            if (string.equals(w))
+//            {
+//                flag++;
+//                break;
+//            }
+//        }
+//        return flag != 5;
+//    }
+//
+//    public static boolean isRelationalOperator(String w)
+//    {
+//        int flag = 5;
+//        for (String string : relationalOperatorArray)
+//        {
+//            if (string.equals(w))
+//            {
+//                flag++;
+//                break;
+//            }
+//        }
+//        return flag != 5;
+//    }
+//
+//    public static boolean isLogical(String w)
+//    {
+//        int flag = 5;
+//        for (String string : logicalOperatorArray)
+//        {
+//            if (string.equals(w))
+//            {
+//                flag++;
+//                break;
+//            }
+//        }
+//        return flag != 5;
+//    }
 
     private static void printArrayList(ArrayList<String> simpleList, String name)
     {
