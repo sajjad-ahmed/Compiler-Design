@@ -18,7 +18,6 @@ import java.util.StringTokenizer;
 public class Main
 {
 
-    //   private static HashMap<String, Integer> offStackPrecedence = new HashMap<>();
     private static HashMap<String, Integer> onStackPrecedence = new HashMap<>();
 
     public static void main(String[] args)
