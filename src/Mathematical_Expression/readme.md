@@ -7,8 +7,8 @@ a = 1
 b = 2
 c = 2
 2
-a x b + a x c + b x c
-a x c - b / c + c x c
+a * b + a * c + b * c
+a * c - b / c + c * c
 
 ```
 ###Output:
@@ -24,9 +24,9 @@ p = 3
 t = 1
 w = 2
 3
-g + p x t - w x p
+g + p * t - w * p
 t - g + t - w
-e + t x t - m
+e + t * t - m
 ```
 ###Output:
 ```
