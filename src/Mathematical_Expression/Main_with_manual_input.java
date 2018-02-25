@@ -1,26 +1,24 @@
 package Mathematical_Expression;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+
 /**
  * ------------------------------------------------------------------------------------------------*
- * File name: Main
+ * File name: Main_with_manual_input
  * Project name: Compiler Design
  * Author: SAJJAD AHMED NILOY
- * Created on: 6:36 PM
+ * Created on: 11:15 PM
  * License:
  * ------------------------------------------------------------------------------------------------*
  **/
 
-public class Main
-{
 
+public class Main_with_manual_input
+{
     private static HashMap<String, Integer> onStackPrecedence = new HashMap<>();
 
     public static void main(String[] args)
@@ -32,69 +30,53 @@ public class Main
         onStackPrecedence.put("^", 9);
         onStackPrecedence.put("(", 0);
 
-        File file = new File("C:\\Users\\Gigabyte\\Desktop\\spring 18\\Compiler Design\\src\\Mathematical_Expression\\input.txt");
-
-        Scanner scanner;
-        ArrayList<String> stringArrayList = new ArrayList<>();
-        try
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter no of identifiers (n):");
+        int n = scanner.nextInt();
+        HashMap<String, Integer> identifiers = new HashMap<>();
+        System.out.println("Enter identifiers with value: (ex: a = 1)");
+        String regEx = "\\w*\\s=\\s\\d{1,}";      //to ensure "identifier(space)=(space)int_Value"
+        for (int i = 0; i < n; )
         {
-            scanner = new Scanner(file);
-            while (scanner.hasNext())
+            String s = scanner.nextLine();
+            s = s.trim();
+            if (!s.equals("") && s.matches(regEx))
             {
-                String line = scanner.nextLine();
-                if (!line.equals(""))
-                    stringArrayList.add(line);
+                StringTokenizer stringTokenizer = new StringTokenizer(s, " ");
+                String id = stringTokenizer.nextToken();
+                stringTokenizer.nextToken();
+                int val = Integer.parseInt(stringTokenizer.nextToken());
+                identifiers.put(id, val);
+                i++;
+            } else
+            {
+                System.out.println("invalid expression. please check and input again:");
             }
-        } catch (FileNotFoundException e)
+        }
+        System.out.println("Enter no of expressions (m):");
+        int m = scanner.nextInt();
+        String[] expressions = new String[m];
+        System.out.println("Enter expressions: (ex: a * b + a * c + b * c)");
+        for (int i = 0; i < m; )
         {
-            System.out.println("File not found!...Please insert the correct path!");
+            String s = scanner.nextLine();
+            if (!s.equals(""))
+            {
+                expressions[i] = s;
+                i++;
+            }
         }
 
-        for (int idx = 0; idx < stringArrayList.size(); )
+        System.out.println("Output:");
+        for (String eachExpression : expressions)
         {
-            int n = Integer.parseInt(stringArrayList.get(idx++));
-            HashMap<String, Integer> identifiers = new HashMap<>();
-            String regEx = "\\w*\\s=\\s\\d{1,}";      //to ensure "identifier(space)=(space)int_Value"
-            for (int i = 0; i < n; )
-            {
-                String s = stringArrayList.get(idx++);
-                s = s.trim();
-                if (!s.equals("") && s.matches(regEx))
-                {
-                    StringTokenizer stringTokenizer = new StringTokenizer(s, " ");
-                    String id = stringTokenizer.nextToken();
-                    stringTokenizer.nextToken();
-                    int val = Integer.parseInt(stringTokenizer.nextToken());
-                    identifiers.put(id, val);
-                    i++;
-                } else
-                {
-                    System.out.println("invalid expression. please check and input again:");
-                }
-            }
-            int m = Integer.parseInt(stringArrayList.get(idx++));
-            String[] expressions = new String[m];
-            for (int i = 0; i < m; )
-            {
-                String s = stringArrayList.get(idx++);
-                if (!s.equals(""))
-                {
-                    expressions[i] = s;
-                    i++;
-                }
-            }
-
-            System.out.println("Output:");
-            for (String eachExpression : expressions)
-            {
-                String postfix = toPostfix(eachExpression, identifiers);
+            String postfix = toPostfix(eachExpression, identifiers);
 //            System.out.println("Postfix: " + postfix);
-                if (postfix.equals("Compilation Error"))
-                    System.out.println("Compilation Error");
-                else
-                    System.out.println(evaluate(postfix, identifiers));
+            if (postfix.equals("Compilation Error"))
+                System.out.println("Compilation Error");
+            else
+                System.out.println(evaluate(postfix, identifiers));
 
-            }
         }
     }
 
@@ -110,7 +92,7 @@ public class Main
             if (valueMap.keySet().contains(element))   //If it is operand, output it
             {
                 output.append(" ").append(element);
-            } else if (element.equals("("))     // If it is opening parenthesis, push it on stack
+            } else if (element.equals("("))     // If it is opening parenthesis, push it on stack
             {
                 stack.push(element);
             } else if (isOperator(element))    //If it is an operator, then
