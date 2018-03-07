@@ -5,7 +5,7 @@ In this assignment, you will work on regular expression. For simplicity, we will
 | :---------------- |:---------------:| ------------:|------------:|
 | Zero or more |a(bc)*de| ade  abcbcde |abde  abcbde|
 | One or more |	a(bc)+de |	abcde  abcbcde |	ade  abc |
-| Once or not at all | a(bc)?de | ade  abcde  | abc  abcbcde |
+| Once or not at all | a(bc)?de | ade  abcde  | abc   abcbcde |
 | Character classes | [a-m]* | blackmail  imbecile | above  below|
 | Negation of character classes | [^aeiou] | b  c | a e |
 | Exactly N times | [^aeiou]{6} | rhythm  syzygy | rhythms  allowed |
