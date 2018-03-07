@@ -51,6 +51,7 @@ public class Main
             String[] expressions = new String[m];
             for (int i = 0; i < m; i++)
             {
+
                 String s = allLinesArrayList.get(idx++).trim();
                 System.out.println("exp: " + s);
             }
