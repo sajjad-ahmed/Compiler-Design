@@ -97,7 +97,7 @@ public class Main
 
     public static void main(String[] _args)
     {
-        File file = new File("C:\\Users\\Gigabyte\\Desktop\\spring 18\\Compiler Design\\src\\Lexical_Analyzer\\input.txt");
+        File file = new File("C:\\Users\\Gigabyte\\Desktop\\spring 18\\Compiler Design\\src\\Lexical_Analyzer\\input_old.txt");
 
 
         ArrayList<Character> characterArrayList = new ArrayList<>();

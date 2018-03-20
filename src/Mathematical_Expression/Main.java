@@ -32,7 +32,7 @@ public class Main
         onStackPrecedence.put("^", 9);
         onStackPrecedence.put("(", 0);
 
-        File file = new File("C:\\Users\\Gigabyte\\Desktop\\spring 18\\Compiler Design\\src\\Mathematical_Expression\\input.txt");
+        File file = new File("C:\\Users\\Gigabyte\\Desktop\\spring 18\\Compiler Design\\src\\Mathematical_Expression\\input_old.txt");
 
         Scanner scanner;
         ArrayList<String> stringArrayList = new ArrayList<>();
